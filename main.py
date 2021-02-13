@@ -17,6 +17,7 @@ def reiniciar():
     except:
       reiniciar()
 
+
 # faz a busca dos dados, e organiza em uma lista, e é reponsavel por mostar o menu de numero + nome do pais
 def menu_lista():
   # puxa as informações do site para a variavel
@@ -27,16 +28,23 @@ def menu_lista():
   # organiza o html
   html_organizado = BeautifulSoup(html_iban,"html.parser")
   #pega um card da tag tbody
-  cards = html_organizado.find("tbody")
+  tabela = html_organizado.find("tbody")
+  linhas = tabela.find_all("tr")
   # joga todos os nomes das moedas da tag td dentro de uma lista
   lista_dict = []
   count = 0
-  for card in cards.find_all("tr"):
+  for linha in linhas:
     count += 1
+    itens = linha.find_all("td")
+    nome = itens[0].text
+    currency_nome = itens[1].text
+    moeda = itens[2].text
+    
     lista = {
       "count" : count,
-      "name_moeda" : card.find("td").get_text(),
-      "codigo_moeda" : card.find("td").next_sibling.next_sibling.next_sibling.next_sibling.get_text()
+      "name_moeda" : nome,
+      "currency" : currency_nome,
+      "codigo_moeda" : moeda
     } 
     lista_dict.append(lista)
   
@@ -58,14 +66,20 @@ def menu_entrada_dados():
       lista = menu_lista()
       for i in lista:
         if i["count"] == entrada_de_dados:
-          print(f"\nVocê escolheu o(a) {i['name_moeda']}")
-          print(f"O código da moeda é {i['codigo_moeda']}")
-          reiniciar()
+          if i["currency"] == "No universal currency":
+            print(f"\n{i['name_moeda']} não tem uma moeda para o país.")
+            reiniciar()
+          else:
+            print(f"\nVocê escolheu o(a) {i['name_moeda']}")
+            print(f"O código da moeda é {i['codigo_moeda']}")
+            reiniciar()
+        
 
 
   except:
     print("Valor errado, digite apenas número e menos que 268")
     reiniciar()
+
 
 # puxa os dados para printar tudo que é necessário na tela
 def main():
