@@ -54,12 +54,13 @@ def menu_lista():
 
 # recebe os dados do usuário, e faz a pesquisa na lista 
 def menu_entrada_dados():
+  lista = menu_lista()
   try:
     entrada_de_dados = int(input("#: "))
-    if entrada_de_dados is not int and entrada_de_dados < 1 and entrada_de_dados >= 268:
-      print("Valor errado, digite apenas número e menos que 268")
+    if entrada_de_dados > len(lista):
+      print("\nValor errado, digite apenas um números válido.")
       reiniciar()
-    elif entrada_de_dados == 000:
+    elif entrada_de_dados == 0:
       print("Programa fechado com sucesso!!")
       return
     else:
@@ -77,7 +78,7 @@ def menu_entrada_dados():
 
 
   except:
-    print("Valor errado, digite apenas número e menos que 268")
+    print("\nValor errado, digite apenas um números válido.")
     reiniciar()
 
 
@@ -86,7 +87,7 @@ def main():
   for i in menu_lista(): 
     print(f"# {i['count']} = {i['name_moeda']}")
     
-  print("\nCaso queira sair do programa, digite um 000.")
+  print("\nCaso queira sair do programa, digite um 0.")
   print("Informe qual pais você quer saber o código da moeda, informando o número: ")
   menu_entrada_dados()
   
